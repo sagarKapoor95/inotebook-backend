@@ -57,7 +57,9 @@ async (req, res) => {
       if (!user) {
         return res.status(400).json({error: "Please login with correct username and password"});
       }
-      const passwordCompare = await bcrypt.compare(password, user.password);
+      const salt = await  bcrypt.genSalt(10);
+      const encrptPass = await bcrypt.hash(req.body.password, salt);
+      const passwordCompare = await bcrypt.compare(password, encrptPass);
       if(!passwordCompare) {
         return res.status(400).json({error: "Please login with correct username and password"});
       }
